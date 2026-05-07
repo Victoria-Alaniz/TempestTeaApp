@@ -24,6 +24,7 @@ class ViewController: UIViewController {
 
     //AlarmKit
     private let alarmManager = AlarmManager.shared
+    private var alarmID: UUID?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +32,7 @@ class ViewController: UIViewController {
         setupUI()
         addTargets()
         resetState()
-        Task {
-            let state = await requestAuthorization()
-            print(state)
-        }
+        Task { _ = await requestAuthorization() }
     }
 
     private func addTargets() {
@@ -111,7 +109,6 @@ class ViewController: UIViewController {
         let remainingSeconds = futureSeconds - currentSeconds
 
         guard remainingSeconds > 0 else {
-            print("sound the alarm")
             resetState()
             return
         }
@@ -128,6 +125,7 @@ class ViewController: UIViewController {
     // MARK: - Utility Methods
 
     private func resetState() {
+        stopAlarm()
         timer?.invalidate()
         timer = nil
         button.setTitle("Start", for: .normal)
@@ -169,10 +167,11 @@ class ViewController: UIViewController {
             presentation: AlarmPresentation(alert: alertContent),
             tintColor: Color.accentColor)
         
-        let id = UUID()
-        
         let configuration = AlarmManager.AlarmConfiguration.alarm(schedule: Alarm.Schedule.fixed(date), attributes: attributes)
-        
+
+        let id = UUID()
+        alarmID = id
+
         Task {
             do {
                 let alarm = try await alarmManager.schedule(id: id, configuration: configuration)
@@ -180,6 +179,12 @@ class ViewController: UIViewController {
                 print(error)
             }
         }
+    }
+
+    private func stopAlarm() {
+        guard let id = alarmID else { return }
+        try? alarmManager.stop(id: id)
+        alarmID = nil
     }
 }
 
