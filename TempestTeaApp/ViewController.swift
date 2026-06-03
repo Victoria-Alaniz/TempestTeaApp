@@ -174,7 +174,7 @@ class ViewController: UIViewController {
 
         Task {
             do {
-                let alarm = try await alarmManager.schedule(id: id, configuration: configuration)
+                _ = try await alarmManager.schedule(id: id, configuration: configuration)
             } catch {
                 print(error)
             }

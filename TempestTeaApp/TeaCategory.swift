@@ -15,9 +15,9 @@ enum TeaCategory: Int, AlarmMetadata, CaseIterable {
     case blackPuErh
     case herbal
 
-    var allCases: [TeaCategory] {
-        return TeaCategory.allCases
-    }
+    //var allCases: [TeaCategory] {
+        //return TeaCategory.allCases
+    //}
 
     var name: String {
         switch self {
