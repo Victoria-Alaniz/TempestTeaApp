@@ -124,6 +124,7 @@ class ViewController: UIViewController {
 
     // MARK: - Utility Methods
 
+    // See if I can get away with only resetState or timerExpired instead of both. If only resetState() is present the timer doesn't trigger
     private func timerExpired() {
         timer?.invalidate()
         timer = nil
