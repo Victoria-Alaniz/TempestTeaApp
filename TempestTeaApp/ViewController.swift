@@ -109,7 +109,7 @@ class ViewController: UIViewController {
         let remainingSeconds = futureSeconds - currentSeconds
 
         guard remainingSeconds > 0 else {
-            resetState()
+            timerExpired()
             return
         }
 
@@ -123,6 +123,13 @@ class ViewController: UIViewController {
     }
 
     // MARK: - Utility Methods
+
+    private func timerExpired() {
+        timer?.invalidate()
+        timer = nil
+        button.setTitle("Start", for: .normal)
+        updateTimeInterval()
+    }
 
     private func resetState() {
         stopAlarm()
